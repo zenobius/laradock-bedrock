@@ -25,6 +25,8 @@ MAINTAINER Mahmoud Zalt <mahmoud@zalt.me>
 # base image (https://github.com/LaraDock/php-fpm).
 #
 
+RUN docker-php-ext-install mysqli
+
 #
 #--------------------------------------------------------------------------
 # Optional Software's Installation
@@ -44,7 +46,7 @@ ARG INSTALL_SOAP=false
 RUN if [ ${INSTALL_SOAP} = true ]; then \
     # Install the soap extension
     apt-get -y update && \
-    apt-get -y install libxml2-dev && \ 
+    apt-get -y install libxml2-dev && \
     docker-php-ext-install soap \
 ;fi
 
@@ -147,7 +149,7 @@ COPY ./opcache.ini /usr/local/etc/php/conf.d/opcache.ini
 ARG CODEIGNITER=false
 RUN if [ ${CODEIGNITER} = true ]; then \
     # Install Codeigniter PHP extentions requirements
-     docker-php-ext-install mysqli && \
+    # docker-php-ext-install mysqli && \
      docker-php-ext-install tokenizer \
 ;fi
 
