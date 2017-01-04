@@ -27,6 +27,8 @@ MAINTAINER Mahmoud Zalt <mahmoud@zalt.me>
 # base image (https://github.com/Laradock/php-fpm).
 #
 
+RUN docker-php-ext-install mysqli
+
 #
 #--------------------------------------------------------------------------
 # Optional Software's Installation
