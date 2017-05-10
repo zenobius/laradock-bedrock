@@ -97,6 +97,18 @@ RUN if [ ${COMPOSER_GLOBAL_INSTALL} = true ]; then \
 ;fi
 
 #####################################
+# WP CLI:
+#####################################
+
+# Check if global install need to be ran
+ARG WPCLI_GLOBAL_INSTALL=false
+ENV WPCLI_GLOBAL_INSTALL ${WPCLI_GLOBAL_INSTALL}
+RUN if [ ${WPCLI_GLOBAL_INSTALL} = true ]; then \
+    # run the install
+    composer global require wp-cli/wp-cli \
+;fi
+
+#####################################
 # Crontab
 #####################################
 USER root
