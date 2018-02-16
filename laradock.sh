@@ -47,10 +47,10 @@ if [[ $# -eq 0 ]] ; then
     exit 1
 fi
 
-source .env
 
 if [ "$1" == "up" ] ; then
     print_style "Initializing Docker Compose\n" "info"
+    source .env
     docker-compose up -d $DEFAULT_WEBSERVER $DEFAULT_DB_SYSTEM;
 
 elif [ "$1" == "down" ]; then
@@ -67,7 +67,7 @@ elif [ "$1" == "ssh" ] ; then
 
 elif [ "$1" == "--" ] ; then
     shift # removing first argument
-    docker-compose exec --user=laradock workspace bash ${@}
+    docker-compose exec --user=laradock workspace bash -c "$*"
 
 else
     print_style "Invalid arguments.\n" "danger"
