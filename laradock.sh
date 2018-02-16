@@ -4,7 +4,7 @@
 # the installation and usage of laradock in general.
 
 # To run, make sure to add permissions to this file:
-# chmod 755 sync.sh
+# chmod +x laradock.sh
 
 # USAGE EXAMPLE:
 # SSH into workspace: ./laradock.sh ssh
@@ -34,11 +34,12 @@ print_style () {
 }
 
 display_options () {
-    printf "Available options:\n";
-    print_style "   up" "success"; printf "\t Rzbs docker compose.\n"
+    print_style "Available options:\n" "info";
+    print_style "   up" "success"; printf "\t\t\t Runs docker compose.\n"
     print_style "   down" "success"; printf "\t\t\t Stops containers.\n"
-    print_style "   ssh [--root]" "success"; printf "\t\t\t Opens bash on the workspace, optionally as root user.\n"
-    print_style "   -- [command]" "info"; printf "\t\t\t Executes any command in workspace, e.g. composer install.\n"
+    print_style "   ssh [--root]" "success"; printf "\t\t Opens bash on the workspace, optionally as root user.\n"
+    print_style "   -- [command]" "success"; printf "\t\t Executes any command in workspace.\n"
+    print_style "\nExample:" "info"; printf "\t\t ./laradock.sh -- composer install --no-dev --optimize-autoloader\n"
 }
 
 if [[ $# -eq 0 ]] ; then
