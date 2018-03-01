@@ -16,16 +16,19 @@ This is a fork of [Laradock](https://github.com/laradock/laradock) prepared to w
        git clone https://github.com/lukasbesch/laradock-bedrock.git docker
 
 2. (Optional) Copy the `env-example` to `.env` in your docker folder. Checkout its options and adjust them as needed.
-3. Start the containers
+3. In your project's `.env file Set the `DB_HOST` constant to the corresponding container `mariadb` or `mysql`
+
+       DB_HOST=mariadb
+4. Start the containers
 
        ./laradock.sh up
-4. Install Composer Packages
+5. Install Composer Packages
 
        ./laradock.sh -- composer install
        
-Your site should be available at `https://localhost`.
+Your site should be available at [http://localhost](http://localhost).
 
-You could also use dnsmasq on your local machine to route all traffic with the TLD *.docker to localhost. Now you are able to give each of your sites a custom hostname such as `mysite.docker`. This is very convenient for the use with password managers. 
+You could also use dnsmasq on your local machine to route all traffic with the TLD *.docker to localhost. Now you are able to give each of your sites a custom hostname such as [http://mysite.docker](http://mysite.docker). This is very convenient for the use with password managers. 
 
 ## Documentation     
 Please checkout the official docs: https://github.com/laradock/laradock
