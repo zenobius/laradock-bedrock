@@ -15,7 +15,7 @@ This is a fork of [Laradock](https://github.com/laradock/laradock) prepared to w
 
        git clone https://github.com/lukasbesch/laradock-bedrock.git docker
 
-2. Copy the `env-example` to `.env` in your docker folder. Checkout its options and adjust them as needed.
+2. (Optional) Copy the `env-example` to `.env` in your docker folder. Checkout its options and adjust them as needed.
 3. Start the containers
 
        ./laradock.sh up

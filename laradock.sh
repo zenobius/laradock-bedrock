@@ -42,6 +42,11 @@ display_options () {
     print_style "\nExample:" "info"; printf "\t\t ./laradock.sh -- composer install --no-dev --optimize-autoloader\n"
 }
 
+up () {
+    source .env
+    docker-compose up -d $DEFAULT_WEBSERVER $DEFAULT_DB_SYSTEM;
+}
+
 if [[ $# -eq 0 ]] ; then
     print_style "Missing arguments.\n" "danger"
     display_options
@@ -51,8 +56,20 @@ fi
 
 if [ "$1" == "up" ] ; then
     print_style "Initializing Docker Compose\n" "info"
-    source .env
-    docker-compose up -d $DEFAULT_WEBSERVER $DEFAULT_DB_SYSTEM;
+    if [ ! -f .env ]; then
+        print_style "No .env file found!\n" "danger"
+        while true; do
+            printf "Use the default .env file?\n"
+            read -p "" yn
+            case $yn in
+                [Yy]* ) cp env-example .env && up; break;;
+                [Nn]* ) exit;;
+                * ) echo "Please answer yes or no.";;
+            esac
+        done
+    else
+        up
+    fi
 
 elif [ "$1" == "down" ]; then
     print_style "Stopping Docker Compose\n" "info"
