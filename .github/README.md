@@ -32,3 +32,45 @@ You could also use dnsmasq on your local machine to route all traffic with the T
 
 ## Documentation     
 Please checkout the official docs: https://github.com/laradock/laradock
+
+## Roadmap
+
+
+- [x] Basic Webserver Setup (nginx or Apache2, PHP-fpm, MariaDB or MySQL)
+
+- [ ] `dnsmasq` instructions
+
+- [ ] Deployment via Ansible
+
+- [ ] secure for use in production
+
+#### Check/add support for laradock containers: ####
+
+- [x] Apache2
+
+- [x] nginx
+
+- [x] PHP-fpm
+
+- [x] MySQL
+
+- [x] MariaDB
+
+- [ ] Redis
+
+- [ ] MemCached
+
+- [ ] HHVM
+
+- [ ] Caddy
+
+- [ ] Varnish
+
+- [ ] HAProxy
+
+- [ ] MailDev/MailHog
+
+- [ ] phpMyAdmin
+
+- [ ] certbot/letsencrypt
+
