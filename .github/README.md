@@ -16,7 +16,7 @@ This is a fork of [Laradock](https://github.com/laradock/laradock) prepared to w
        git clone https://github.com/lukasbesch/laradock-bedrock.git docker
 
 2. (Optional) Copy the `env-example` to `.env` in your docker folder. Checkout its options and adjust them as needed.
-3. In your project's `.env file Set the `DB_HOST` constant to the corresponding container `mariadb` or `mysql`
+3. In your project's `.env` file Set the `DB_HOST` constant to the corresponding container `mariadb` or `mysql`
 
        DB_HOST=mariadb
 4. Start the containers
