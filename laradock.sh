@@ -35,6 +35,7 @@ print_style () {
 
 display_options () {
     print_style "Available options:\n" "info";
+    print_style "   create" "success"; printf "\t\t\t Creates docker environment.\n"
     print_style "   up" "success"; printf "\t\t\t Runs docker compose.\n"
     print_style "   down" "success"; printf "\t\t\t Stops containers.\n"
     print_style "   ssh [--root]" "success"; printf "\t\t Opens bash on the workspace, optionally as root user.\n"
@@ -47,6 +48,32 @@ up () {
     docker-compose up -d $DEFAULT_WEBSERVER $DEFAULT_DB_SYSTEM;
 }
 
+copyEnv () {
+    while true; do
+        printf "Use the default .env file? (y/n)\n"
+        read -p "" yn
+        case $yn in
+            [Yy]* ) cp env-example .env && up; break;;
+            [Nn]* ) exit;;
+            * ) echo "Please answer yes or no.";;
+        esac
+    done
+}
+
+createDB () {
+    source .env
+    pushd $APPLICATION > /dev/null
+    FOLDER=${PWD##*/}
+    popd > /dev/null
+    read -p "Enter DB name (default: $FOLDER): " dbName
+    if [[ -z "$dbName" ]]; then
+       dbName=$FOLDER
+    fi
+    dbChar="utf8";
+    dbCollate="utf8_unicode_ci";
+    docker-compose exec $DEFAULT_DB_SYSTEM bash -c 'mysql -uroot -proot -e "CREATE DATABASE IF NOT EXISTS \`'$dbName'\` CHARACTER SET '$dbChar' COLLATE '$dbCollate';"'
+}
+
 if [[ $# -eq 0 ]] ; then
     print_style "Missing arguments.\n" "danger"
     display_options
@@ -54,19 +81,21 @@ if [[ $# -eq 0 ]] ; then
 fi
 
 
-if [ "$1" == "up" ] ; then
+if [ "$1" == "create" ] ; then
     print_style "Initializing Docker Compose\n" "info"
     if [ ! -f .env ]; then
         print_style "No .env file found!\n" "danger"
-        while true; do
-            printf "Use the default .env file?\n"
-            read -p "" yn
-            case $yn in
-                [Yy]* ) cp env-example .env && up; break;;
-                [Nn]* ) exit;;
-                * ) echo "Please answer yes or no.";;
-            esac
-        done
+        copyEnv;
+    else
+        up
+    fi
+    createDB;
+
+elif [ "$1" == "up" ]; then
+    print_style "Starting containers\n" "info"
+    if [ ! -f .env ]; then
+        print_style "No .env file found!\n" "danger"
+        copyEnv;
     else
         up
     fi
