@@ -1,6 +1,9 @@
-# Laradock for Bedrock
+# WP Mesh
+
+A containerized docker environment for WordPress.
 
 This is a fork of [Laradock](https://github.com/laradock/laradock) prepared to work with WordPress boilerplate [Bedrock](https://github.com/roots/bedrock).
+
 
 ## What is different?
  - Document root points to /var/www/web
@@ -19,9 +22,10 @@ This is a fork of [Laradock](https://github.com/laradock/laradock) prepared to w
 3. In your project's `.env` file Set the `DB_HOST` constant to the corresponding container `mariadb` or `mysql`
 
        DB_HOST=mariadb
-4. Start the containers
+4. Create docker containers. This will also create
 
-       ./laradock.sh up
+       ./laradock.sh create
+       
 5. Install Composer Packages
 
        ./laradock.sh -- composer install
@@ -35,14 +39,17 @@ Please checkout the official docs: https://github.com/laradock/laradock
 
 ## Roadmap
 
+- [ ] Extend Documentation
 
 - [x] Basic Webserver Setup (nginx or Apache2, PHP-fpm, MariaDB or MySQL)
 
 - [ ] `dnsmasq` instructions
 
-- [ ] Deployment via Ansible
+- [ ] Add support for multiple sites and setups
 
-- [ ] secure for use in production
+- [ ] Deployment to AWS via Ansible
+
+- [ ] Secure for use in production
 
 #### Check/add support for laradock containers: ####
 

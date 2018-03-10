@@ -1,16 +1,16 @@
 #!/bin/bash
 
 # This shell script is an optional tool to simplify
-# the installation and usage of laradock in general.
+# the installation and usage of wpmesh in general.
 
 # To run, make sure to add permissions to this file:
-# chmod +x laradock.sh
+# chmod +x wpmesh.sh
 
 # USAGE EXAMPLE:
-# SSH into workspace: ./laradock.sh ssh
-# SSH into workspace as root: ./laradock.sh ssh --root
-# Composer install: ./laradock.sh -- composer install
-# Composer update: ./laradock.sh -- composer update
+# SSH into workspace: ./wpmesh.sh ssh
+# SSH into workspace as root: ./wpmesh.sh ssh --root
+# Composer install: ./wpmesh.sh -- composer install
+# Composer update: ./wpmesh.sh -- composer update
 
 # prints colored text
 print_style () {
@@ -39,8 +39,10 @@ display_options () {
     print_style "   up" "success"; printf "\t\t\t Runs docker compose.\n"
     print_style "   down" "success"; printf "\t\t\t Stops containers.\n"
     print_style "   ssh [--root]" "success"; printf "\t\t Opens bash on the workspace, optionally as root user.\n"
-    print_style "   -- [command]" "success"; printf "\t\t Executes any command in workspace.\n"
-    print_style "\nExample:" "info"; printf "\t\t ./laradock.sh -- composer install --no-dev --optimize-autoloader\n"
+    print_style "   composer [command]" "success"; printf "\t\t Executes any composer command in workspace.\n"
+    print_style "   wpcli [command]" "success"; printf "\t\t Executes any wpcli command in workspace.\n"
+    print_style "   bash [command]" "success"; printf "\t\t Enters bash or executes any command.\n"
+    print_style "\nExample:" "info"; printf "\t\t ./wpmesh.sh  composer install --no-dev --optimize-autoloader\n"
 }
 
 up () {
@@ -53,7 +55,7 @@ copyEnv () {
         printf "Use the default .env file? (y/n)\n"
         read -p "" yn
         case $yn in
-            [Yy]* ) cp env-example .env && up; break;;
+            [Yy]* ) cp env-example .env; break;;
             [Nn]* ) exit;;
             * ) echo "Please answer yes or no.";;
         esac
@@ -63,15 +65,9 @@ copyEnv () {
 createDB () {
     source .env
     pushd $APPLICATION > /dev/null
-    FOLDER=${PWD##*/}
+    APPLICATION_DIRNAME=${PWD##*/}
     popd > /dev/null
-    read -p "Enter DB name (default: $FOLDER): " dbName
-    if [[ -z "$dbName" ]]; then
-       dbName=$FOLDER
-    fi
-    dbChar="utf8";
-    dbCollate="utf8_unicode_ci";
-    docker-compose exec $DEFAULT_DB_SYSTEM bash -c 'mysql -uroot -proot -e "CREATE DATABASE IF NOT EXISTS \`'$dbName'\` CHARACTER SET '$dbChar' COLLATE '$dbCollate';"'
+    docker-compose exec $DEFAULT_DB_SYSTEM bash -c 'mysql -uroot -proot -e "CREATE DATABASE IF NOT EXISTS \`'$APPLICATION_DIRNAME'\` CHARACTER SET '$DB_CHARSET' COLLATE '$DB_COLLATE';"'
 }
 
 if [[ $# -eq 0 ]] ; then
@@ -82,13 +78,13 @@ fi
 
 
 if [ "$1" == "create" ] ; then
-    print_style "Initializing Docker Compose\n" "info"
+    print_style "Building containers\n" "info"
     if [ ! -f .env ]; then
         print_style "No .env file found!\n" "danger"
         copyEnv;
-    else
-        up
     fi
+    source .env
+    docker-compose up -d --build --force-recreate $DEFAULT_WEBSERVER $DEFAULT_DB_SYSTEM;
     createDB;
 
 elif [ "$1" == "up" ]; then
@@ -96,9 +92,8 @@ elif [ "$1" == "up" ]; then
     if [ ! -f .env ]; then
         print_style "No .env file found!\n" "danger"
         copyEnv;
-    else
-        up
     fi
+    up;
 
 elif [ "$1" == "down" ]; then
     print_style "Stopping Docker Compose\n" "info"
