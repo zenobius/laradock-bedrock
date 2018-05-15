@@ -110,7 +110,7 @@ elif [ "$1" == "ssh" ] ; then
         SSHUSER=root
     fi
     print_style "SSH into workspace as user $SSHUSER\n" "info"
-    docker-composer exec --user=$SSHUSER workspace bash;
+    docker-compose exec --user=$SSHUSER workspace bash;
 
 elif [ "$1" == "--" ] ; then
     shift # removing first argument
